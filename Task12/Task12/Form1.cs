@@ -1,4 +1,3 @@
-using System.Drawing;
 using Timer = System.Threading.Timer;
 
 
@@ -52,6 +51,9 @@ namespace Task12
         int _positionY;
         int _positionBasketX;
         int _positionBasketY;
+        int _countBlue = 0;
+        int _countGreen = 0;
+        int _countRed = 0;
 
         public Form1()
         {
@@ -68,10 +70,10 @@ namespace Task12
             {
                 Basket basket = new Basket(_positionBasketX, _positionBasketY, width, height, Color.Purple);
                 _listBasket.Add(basket);
-                _positionBasketX+=width;
+                _positionBasketX += width;
             }
             TimerCallback tm = new TimerCallback(OnTimerTicked);
-            _timer = new Timer(tm, 0, 0, 1000);
+            _timer = new Timer(tm, 0, 0, 200);
         }
 
         private void OnTimerTicked(object? state)
@@ -89,43 +91,58 @@ namespace Task12
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
             _positionY = 0;
+            for (int i = 0; i < _squares.Count; i++)
+            {               
+                for (int j = 0; j < _listBasket.Count; j++)
+                {
+                    if (_squares[i].PositionY == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
+                    {
+                        _squares.RemoveAt(i);
+
+                        if (_squares[i].Color == Color.Blue)
+                        {
+                            _countBlue++;
+                            Invoke(() =>
+                            {
+                                BlueTextBox.Text = Convert.ToString(_countBlue);
+                            });
+                        }
+                        else if (_squares[i].Color == Color.Red)
+                        {
+                            _countRed++;
+                            Invoke(() =>
+                            {
+                                RedTextBox.Text = Convert.ToString(_countRed);
+                            });
+
+                        }
+                        else if (_squares[i].Color == Color.Green)
+                        {
+                            _countGreen++;
+                            Invoke(() =>
+                            {
+                                GreenTextBox.Text = Convert.ToString(_countGreen);
+                            });
+
+                        }
+                    }
+
+                }
+
+            }
             if (_squares.Count > 1)
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
                     _squares[i].PositionY += height;
-                }
-            }
 
-            for (int i = 0; i < _listPositionX.Count; i++)
-            {
-                _positionX = width * _listPositionX[i];
-                int randomNumberColor = _random.Next(0, 4);
-                if (randomNumberColor == 0)
-                {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Blue);
-                    _squares.Add(square);
-                }
-                else if (randomNumberColor == 1)
-                {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Red);
-                    _squares.Add(square);
-                }
-                else if (randomNumberColor == 2)
-                {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Green);
-                    _squares.Add(square);
-                }
-                else
-                {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Yellow);
-                    _squares.Add(square);
                 }
             }
             Draw();
+
         }
 
-        private void Draw()
+        public void Draw()
         {
             Graphics g = Panel.CreateGraphics();
             int height = Panel.ClientSize.Height / 31;
@@ -150,6 +167,6 @@ namespace Task12
                 g.FillRectangle(new SolidBrush(_listBasket[i].Color), _listBasket[i].PositionX, _listBasket[i].PositionY, _listBasket[i].Width, _listBasket[i].Height);
             }
         }
-       
+
     }
 }
