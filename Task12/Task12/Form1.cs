@@ -65,8 +65,8 @@ namespace Task12
             _squares.Clear();
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
-            _positionBasketX =  13;
-            _positionBasketY =  30;
+            _positionBasketX = 13;
+            _positionBasketY = 30;
 
             _basket = new Basket(_positionBasketX, _positionBasketY, 3, 1, Color.Purple);
 
@@ -76,8 +76,6 @@ namespace Task12
 
         private void OnTimerTicked(object? state)
         {
-            int width = Panel.ClientSize.Width / 31;
-            int height = Panel.ClientSize.Height / 31;
             _listPositionX.Clear();
             for (int j = 0; j < 31; j++)
             {
@@ -92,7 +90,7 @@ namespace Task12
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
-                    if (_squares[i].PositionY == _basket.PositionY && (_squares[i].PositionX == _basket.PositionX || _squares[i].PositionX == _basket.PositionX + width || _squares[i].PositionX == _basket.PositionX + width * 2))
+                    if (_squares[i].PositionY == _basket.PositionY && (_squares[i].PositionX == _basket.PositionX || _squares[i].PositionX == _basket.PositionX + 1 || _squares[i].PositionX == _basket.PositionX + 2))
                     {
                         _squares.RemoveAt(i);
 
@@ -129,31 +127,28 @@ namespace Task12
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
-                    _squares[i].PositionY += height;
+                    _squares[i].PositionY++;
                 }
             }
 
-            Color color;
-
             for (int i = 0; i < _listPositionX.Count; i++)
             {
-                _positionX = width * _listPositionX[i];
+                _positionX = _listPositionX[i];
 
                 int randomColor = _random.Next(0, 3);
                 if (randomColor == 0)
                 {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Red);
+                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Red);
                     _squares.Add(square);
-
                 }
                 else if (randomColor == 1)
                 {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Blue);
+                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Blue);
                     _squares.Add(square);
                 }
                 else if (randomColor == 2)
                 {
-                    Square square = new Square(_positionX, _positionY, width, height, Color.Green);
+                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Green);
                     _squares.Add(square);
                 }
             }
@@ -164,33 +159,30 @@ namespace Task12
 
         public void Draw()
         {
-            Panel.CreateGraphics().Clear(Color.White);
-
             Graphics g = Panel.CreateGraphics();
+            g.Clear(Color.White);
             int height = Panel.ClientSize.Height / 31;
             int width = Panel.ClientSize.Width / 31;
 
             for (int i = 0; i < _squares.Count; i++)
             {
-                var dx = _squares[i].PositionX;
-                var dy = _squares[i].PositionY;
-                var dWidth = _squares[i].Width;
-                var dHeight = _squares[i].Height;
+                var dx = _squares[i].PositionX * width;
+                var dy = _squares[i].PositionY * height;
+                var dWidth = _squares[i].Width * width;
+                var dHeight = _squares[i].Height * height;
                 var brush = _squares[i].Color;
                 Invoke(() =>
                 {
-                    g.FillRectangle(new SolidBrush(Color.White), dx, dy - height, dWidth, dHeight);
-
                     g.FillRectangle(new SolidBrush(brush), dx, dy, dWidth, dHeight);
                 });
             }
-            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX * width, _basket.PositionY*height, _basket.Width * width, _basket.Height * height);
+            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX * width, _basket.PositionY * height, _basket.Width * width, _basket.Height * height);
 
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-
+            int gameFieldSize = 30;
             if (e.KeyCode == Keys.A)
             {
                 if (_basket.PositionX > 0)
@@ -200,7 +192,7 @@ namespace Task12
             }
             if (e.KeyCode == Keys.D)
             {
-                if (_basket.PositionX <  28)
+                if (_basket.PositionX < (gameFieldSize - _basket.Width + 1))
                 {
                     _basket.PositionX++;
                 }
