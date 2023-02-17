@@ -95,7 +95,7 @@ namespace Task12
             {               
                 for (int j = 0; j < _listBasket.Count; j++)
                 {
-                    if (_squares[i].PositionY == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
+                    if (_squares[i].PositionY + height == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
                     {
                         _squares.RemoveAt(i);
 
