@@ -1,3 +1,4 @@
+using System.Drawing;
 using Timer = System.Threading.Timer;
 
 
@@ -73,7 +74,7 @@ namespace Task12
                 _positionBasketX += width;
             }
             TimerCallback tm = new TimerCallback(OnTimerTicked);
-            _timer = new Timer(tm, 0, 0, 200);
+            _timer = new Timer(tm, 0, 0, 500);
         }
 
         private void OnTimerTicked(object? state)
@@ -91,44 +92,47 @@ namespace Task12
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
             _positionY = 0;
-            for (int i = 0; i < _squares.Count; i++)
-            {               
-                for (int j = 0; j < _listBasket.Count; j++)
+            if (_squares.Count > 1)
+            {
+                for (int i = 0; i < _squares.Count; i++)
                 {
-                    if (_squares[i].PositionY + height == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
+                    for (int j = 0; j < _listBasket.Count; j++)
                     {
-                        _squares.RemoveAt(i);
-
-                        if (_squares[i].Color == Color.Blue)
+                        if (_squares[i].PositionY  == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
                         {
-                            _countBlue++;
-                            Invoke(() =>
-                            {
-                                BlueTextBox.Text = Convert.ToString(_countBlue);
-                            });
-                        }
-                        else if (_squares[i].Color == Color.Red)
-                        {
-                            _countRed++;
-                            Invoke(() =>
-                            {
-                                RedTextBox.Text = Convert.ToString(_countRed);
-                            });
+                            _squares.RemoveAt(i);
 
-                        }
-                        else if (_squares[i].Color == Color.Green)
-                        {
-                            _countGreen++;
-                            Invoke(() =>
+                            if (_squares[i].Color == Color.Blue)
                             {
-                                GreenTextBox.Text = Convert.ToString(_countGreen);
-                            });
+                                _countBlue++;
+                                Invoke(() =>
+                                {
+                                    BlueTextBox.Text = Convert.ToString(_countBlue);
+                                });
+                            }
+                            else if (_squares[i].Color == Color.Red)
+                            {
+                                _countRed++;
+                                Invoke(() =>
+                                {
+                                    RedTextBox.Text = Convert.ToString(_countRed);
+                                });
 
+                            }
+                            else if (_squares[i].Color == Color.Green)
+                            {
+                                _countGreen++;
+                                Invoke(() =>
+                                {
+                                    GreenTextBox.Text = Convert.ToString(_countGreen);
+                                });
+
+                            }
                         }
+
                     }
 
                 }
-
             }
             if (_squares.Count > 1)
             {
@@ -138,6 +142,32 @@ namespace Task12
 
                 }
             }
+
+            Color color;
+          
+            for (int i=0; i<_listPositionX.Count;i++)
+            {
+                _positionX = width * _listPositionX[i];
+
+                int randomColor = _random.Next(0, 3);
+                if (randomColor == 0)
+                {
+                    Square square = new Square(_positionX, _positionY, width, height, Color.Red);
+                    _squares.Add(square);
+
+                }
+                else if (randomColor == 1)
+                {
+                    Square square = new Square(_positionX, _positionY, width, height, Color.Blue);
+                    _squares.Add(square);
+                }
+                else if(randomColor==2)
+                {
+                    Square square = new Square(_positionX, _positionY, width, height, Color.Green);
+                    _squares.Add(square);
+                }
+            }
+
             Draw();
 
         }
