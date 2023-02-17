@@ -202,10 +202,18 @@ namespace Task12
             if (e.KeyCode == Keys.A)
             {
                 _basket.PositionX -= width;
+                if(_basket.PositionX == 0)
+                {
+                    MessageBox.Show("Дальше стена!");
+                }
             }
             if (e.KeyCode == Keys.D)
             {
                 _basket.PositionX += width;
+                if (_basket.PositionX + width*2 == 31)
+                {
+                    MessageBox.Show("Дальше стена!");
+                }
             }
         }
     }
