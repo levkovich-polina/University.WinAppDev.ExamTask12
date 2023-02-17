@@ -68,7 +68,7 @@ namespace Task12
             _positionBasketX = width * 13;
             _positionBasketY = height * 30;
 
-            _basket = new Basket(_positionBasketX, _positionBasketY, 1, 1, Color.Purple);
+            _basket = new Basket(_positionBasketX, _positionBasketY, 3, 1, Color.Purple);
 
             TimerCallback tm = new TimerCallback(OnTimerTicked);
             _timer = new Timer(tm, 0, 0, 500);
@@ -96,7 +96,7 @@ namespace Task12
                 for (int i = 0; i < _squares.Count; i++)
                 {
 
-                    if (_squares[i].PositionY == _basket.PositionY && _squares[i].PositionX == _basket.PositionX)
+                    if (_squares[i].PositionY == _basket.PositionY && (_squares[i].PositionX == _basket.PositionX || _squares[i].PositionX == _basket.PositionX + width || _squares[i].PositionX == _basket.PositionX + width * 2))
                     {
                         _squares.RemoveAt(i);
 
@@ -190,7 +190,7 @@ namespace Task12
                     g.FillRectangle(new SolidBrush(brush), dx, dy, dWidth, dHeight);
                 });
             }
-            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX, _basket.PositionY, width * 3, height);
+            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX, _basket.PositionY, _basket.Width * width, _basket.Height * height);
 
         }
 
@@ -201,11 +201,11 @@ namespace Task12
 
             if (e.KeyCode == Keys.A)
             {
-                _basket.PositionX--;
+                _basket.PositionX -= width;
             }
             if (e.KeyCode == Keys.D)
             {
-                _basket.PositionX++;
+                _basket.PositionX += width;
             }
         }
     }
