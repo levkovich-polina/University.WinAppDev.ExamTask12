@@ -76,7 +76,6 @@ namespace Task12
 
         private void OnTimerTicked(object? state)
         {
-
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
             _listPositionX.Clear();
@@ -88,8 +87,6 @@ namespace Task12
                     _listPositionX.Add(j);
                 }
             }
-
-
             _positionY = 0;
             if (_squares.Count > 1)
             {
@@ -133,7 +130,6 @@ namespace Task12
                 for (int i = 0; i < _squares.Count; i++)
                 {
                     _squares[i].PositionY += height;
-
                 }
             }
 
@@ -193,7 +189,6 @@ namespace Task12
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             int width = Panel.ClientSize.Width / 31;
-            int height = Panel.ClientSize.Height / 31;
 
             if (e.KeyCode == Keys.A)
             {
@@ -204,7 +199,7 @@ namespace Task12
             }
             if (e.KeyCode == Keys.D)
             {
-                if (_basket.PositionX + width*2 != 31)
+                if (_basket.PositionX + width * 2 != 31)
                 {
                     _basket.PositionX++;
                 }
