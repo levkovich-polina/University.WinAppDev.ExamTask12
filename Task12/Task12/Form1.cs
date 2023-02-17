@@ -1,4 +1,3 @@
-using System.Drawing;
 using Timer = System.Threading.Timer;
 
 
@@ -63,22 +62,26 @@ namespace Task12
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
+            Panel.CreateGraphics().Clear(Color.White);
+            _squares.Clear();
+            _listBasket.Clear();
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
             _positionBasketX = width * 13;
             _positionBasketY = height * 30;
-            for (int i = 0; i < 3; i++)
-            {
-                Basket basket = new Basket(_positionBasketX, _positionBasketY, width, height, Color.Purple);
-                _listBasket.Add(basket);
-                _positionBasketX += width;
-            }
+
+            Basket basket = new Basket(_positionBasketX, _positionBasketY, width * 3, height * 3, Color.Purple);
+            _listBasket.Add(basket);
+
             TimerCallback tm = new TimerCallback(OnTimerTicked);
             _timer = new Timer(tm, 0, 0, 500);
         }
 
         private void OnTimerTicked(object? state)
         {
+
+            int width = Panel.ClientSize.Width / 31;
+            int height = Panel.ClientSize.Height / 31;
             _listPositionX.Clear();
             for (int j = 0; j < 31; j++)
             {
@@ -89,8 +92,7 @@ namespace Task12
                 }
             }
 
-            int width = Panel.ClientSize.Width / 31;
-            int height = Panel.ClientSize.Height / 31;
+
             _positionY = 0;
             if (_squares.Count > 1)
             {
@@ -98,7 +100,7 @@ namespace Task12
                 {
                     for (int j = 0; j < _listBasket.Count; j++)
                     {
-                        if (_squares[i].PositionY  == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
+                        if (_squares[i].PositionY == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
                         {
                             _squares.RemoveAt(i);
 
@@ -144,8 +146,8 @@ namespace Task12
             }
 
             Color color;
-          
-            for (int i=0; i<_listPositionX.Count;i++)
+
+            for (int i = 0; i < _listPositionX.Count; i++)
             {
                 _positionX = width * _listPositionX[i];
 
@@ -161,7 +163,7 @@ namespace Task12
                     Square square = new Square(_positionX, _positionY, width, height, Color.Blue);
                     _squares.Add(square);
                 }
-                else if(randomColor==2)
+                else if (randomColor == 2)
                 {
                     Square square = new Square(_positionX, _positionY, width, height, Color.Green);
                     _squares.Add(square);
@@ -192,11 +194,24 @@ namespace Task12
                     g.FillRectangle(new SolidBrush(brush), dx, dy, dWidth, dHeight);
                 });
             }
-            for (int i = 0; i < _listBasket.Count; i++)
-            {
-                g.FillRectangle(new SolidBrush(_listBasket[i].Color), _listBasket[i].PositionX, _listBasket[i].PositionY, _listBasket[i].Width, _listBasket[i].Height);
-            }
+
+            g.FillRectangle(new SolidBrush(_listBasket[0].Color), _listBasket[0].PositionX, _listBasket[0].PositionY, _listBasket[0].Width, _listBasket[0].Height);
+
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            int width = Panel.ClientSize.Width / 31;
+            int height = Panel.ClientSize.Height / 31;
+
+            if (e.KeyCode == Keys.A)
+            {
+                _listBasket[0].PositionX--;
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                _listBasket[0].PositionX++;
+            }
+        }
     }
 }
