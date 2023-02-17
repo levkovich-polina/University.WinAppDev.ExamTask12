@@ -95,7 +95,6 @@ namespace Task12
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
-
                     if (_squares[i].PositionY == _basket.PositionY && (_squares[i].PositionX == _basket.PositionX || _squares[i].PositionX == _basket.PositionX + width || _squares[i].PositionX == _basket.PositionX + width * 2))
                     {
                         _squares.RemoveAt(i);
@@ -126,10 +125,7 @@ namespace Task12
                             });
 
                         }
-                    }
-
-
-
+                    }       
                 }
             }
             if (_squares.Count > 1)
@@ -201,11 +197,17 @@ namespace Task12
 
             if (e.KeyCode == Keys.A)
             {
-                _basket.PositionX -= width;
+                if(_basket.PositionX != 0)
+                {
+                    _basket.PositionX--;
+                }
             }
             if (e.KeyCode == Keys.D)
             {
-                _basket.PositionX += width;
+                if (_basket.PositionX + width*2 != 31)
+                {
+                    _basket.PositionX++;
+                }
             }
         }
     }
