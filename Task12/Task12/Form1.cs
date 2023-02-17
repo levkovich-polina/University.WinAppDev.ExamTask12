@@ -65,8 +65,8 @@ namespace Task12
             _squares.Clear();
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
-            _positionBasketX = width * 13;
-            _positionBasketY = height * 30;
+            _positionBasketX =  13;
+            _positionBasketY =  30;
 
             _basket = new Basket(_positionBasketX, _positionBasketY, 3, 1, Color.Purple);
 
@@ -122,7 +122,7 @@ namespace Task12
                             });
 
                         }
-                    }       
+                    }
                 }
             }
             if (_squares.Count > 1)
@@ -164,6 +164,8 @@ namespace Task12
 
         public void Draw()
         {
+            Panel.CreateGraphics().Clear(Color.White);
+
             Graphics g = Panel.CreateGraphics();
             int height = Panel.ClientSize.Height / 31;
             int width = Panel.ClientSize.Width / 31;
@@ -182,24 +184,23 @@ namespace Task12
                     g.FillRectangle(new SolidBrush(brush), dx, dy, dWidth, dHeight);
                 });
             }
-            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX, _basket.PositionY, _basket.Width * width, _basket.Height * height);
+            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX * width, _basket.PositionY*height, _basket.Width * width, _basket.Height * height);
 
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            int width = Panel.ClientSize.Width / 31;
 
             if (e.KeyCode == Keys.A)
             {
-                if(_basket.PositionX != 0)
+                if (_basket.PositionX > 0)
                 {
                     _basket.PositionX--;
                 }
             }
             if (e.KeyCode == Keys.D)
             {
-                if (_basket.PositionX + width * 2 != 31)
+                if (_basket.PositionX <  28)
                 {
                     _basket.PositionX++;
                 }
