@@ -45,7 +45,6 @@ namespace Task12
         Timer _timer;
         List<Square> _squares = new List<Square>();
         List<int> _listPositionX = new List<int>();
-        List<Basket> _listBasket = new List<Basket>();
         Random _random = new Random();
         int _positionX;
         int _positionY;
@@ -54,7 +53,7 @@ namespace Task12
         int _countBlue = 0;
         int _countGreen = 0;
         int _countRed = 0;
-
+        Basket _basket;
         public Form1()
         {
             InitializeComponent();
@@ -64,14 +63,12 @@ namespace Task12
         {
             Panel.CreateGraphics().Clear(Color.White);
             _squares.Clear();
-            _listBasket.Clear();
             int width = Panel.ClientSize.Width / 31;
             int height = Panel.ClientSize.Height / 31;
             _positionBasketX = width * 13;
             _positionBasketY = height * 30;
 
-            Basket basket = new Basket(_positionBasketX, _positionBasketY, width * 3, height * 3, Color.Purple);
-            _listBasket.Add(basket);
+            _basket = new Basket(_positionBasketX, _positionBasketY, 1, 1, Color.Purple);
 
             TimerCallback tm = new TimerCallback(OnTimerTicked);
             _timer = new Timer(tm, 0, 0, 500);
@@ -98,41 +95,40 @@ namespace Task12
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
-                    for (int j = 0; j < _listBasket.Count; j++)
+
+                    if (_squares[i].PositionY == _basket.PositionY && _squares[i].PositionX == _basket.PositionX)
                     {
-                        if (_squares[i].PositionY == _listBasket[j].PositionY && _squares[i].PositionX == _listBasket[j].PositionX)
+                        _squares.RemoveAt(i);
+
+                        if (_squares[i].Color == Color.Blue)
                         {
-                            _squares.RemoveAt(i);
-
-                            if (_squares[i].Color == Color.Blue)
+                            _countBlue++;
+                            Invoke(() =>
                             {
-                                _countBlue++;
-                                Invoke(() =>
-                                {
-                                    BlueTextBox.Text = Convert.ToString(_countBlue);
-                                });
-                            }
-                            else if (_squares[i].Color == Color.Red)
-                            {
-                                _countRed++;
-                                Invoke(() =>
-                                {
-                                    RedTextBox.Text = Convert.ToString(_countRed);
-                                });
-
-                            }
-                            else if (_squares[i].Color == Color.Green)
-                            {
-                                _countGreen++;
-                                Invoke(() =>
-                                {
-                                    GreenTextBox.Text = Convert.ToString(_countGreen);
-                                });
-
-                            }
+                                BlueTextBox.Text = Convert.ToString(_countBlue);
+                            });
                         }
+                        else if (_squares[i].Color == Color.Red)
+                        {
+                            _countRed++;
+                            Invoke(() =>
+                            {
+                                RedTextBox.Text = Convert.ToString(_countRed);
+                            });
 
+                        }
+                        else if (_squares[i].Color == Color.Green)
+                        {
+                            _countGreen++;
+                            Invoke(() =>
+                            {
+                                GreenTextBox.Text = Convert.ToString(_countGreen);
+                            });
+
+                        }
                     }
+
+
 
                 }
             }
@@ -194,8 +190,7 @@ namespace Task12
                     g.FillRectangle(new SolidBrush(brush), dx, dy, dWidth, dHeight);
                 });
             }
-
-            g.FillRectangle(new SolidBrush(_listBasket[0].Color), _listBasket[0].PositionX, _listBasket[0].PositionY, _listBasket[0].Width, _listBasket[0].Height);
+            g.FillRectangle(new SolidBrush(_basket.Color), _basket.PositionX, _basket.PositionY, width * 3, height);
 
         }
 
@@ -206,11 +201,11 @@ namespace Task12
 
             if (e.KeyCode == Keys.A)
             {
-                _listBasket[0].PositionX--;
+                _basket.PositionX--;
             }
             if (e.KeyCode == Keys.D)
             {
-                _listBasket[0].PositionX++;
+                _basket.PositionX++;
             }
         }
     }
