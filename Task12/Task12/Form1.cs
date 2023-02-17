@@ -54,6 +54,7 @@ namespace Task12
         int _countGreen = 0;
         int _countRed = 0;
         Basket _basket;
+        private const int _gameFieldSize = 30;
         public Form1()
         {
             InitializeComponent();
@@ -63,8 +64,8 @@ namespace Task12
         {
             Panel.CreateGraphics().Clear(Color.White);
             _squares.Clear();
-            int width = Panel.ClientSize.Width / 31;
-            int height = Panel.ClientSize.Height / 31;
+            int width = Panel.ClientSize.Width / _gameFieldSize;
+            int height = Panel.ClientSize.Height / _gameFieldSize;
             _positionBasketX = 13;
             _positionBasketY = 30;
 
@@ -77,7 +78,7 @@ namespace Task12
         private void OnTimerTicked(object? state)
         {
             _listPositionX.Clear();
-            for (int j = 0; j < 31; j++)
+            for (int j = 0; j < _gameFieldSize; j++)
             {
                 int chance = _random.Next(1, 11);
                 if (chance <= 1)
@@ -90,7 +91,7 @@ namespace Task12
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
-                    if (_squares[i].PositionY == _basket.PositionY && (_squares[i].PositionX == _basket.PositionX || _squares[i].PositionX == _basket.PositionX + 1 || _squares[i].PositionX == _basket.PositionX + 2))
+                    if (_basket.PositionY == _squares[i].PositionY && _basket.PositionX <= _squares[i].PositionX && _squares[i].PositionX <= (_basket.PositionX + _basket.Width - 1))
                     {
                         _squares.RemoveAt(i);
 
@@ -161,8 +162,8 @@ namespace Task12
         {
             Graphics g = Panel.CreateGraphics();
             g.Clear(Color.White);
-            int height = Panel.ClientSize.Height / 31;
-            int width = Panel.ClientSize.Width / 31;
+            int height = Panel.ClientSize.Height / _gameFieldSize;
+            int width = Panel.ClientSize.Width / _gameFieldSize;
 
             for (int i = 0; i < _squares.Count; i++)
             {
@@ -182,7 +183,6 @@ namespace Task12
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            int gameFieldSize = 30;
             if (e.KeyCode == Keys.A)
             {
                 if (_basket.PositionX > 0)
@@ -192,7 +192,7 @@ namespace Task12
             }
             if (e.KeyCode == Keys.D)
             {
-                if (_basket.PositionX < (gameFieldSize - _basket.Width + 1))
+                if (_basket.PositionX < (_gameFieldSize - _basket.Width))
                 {
                     _basket.PositionX++;
                 }
