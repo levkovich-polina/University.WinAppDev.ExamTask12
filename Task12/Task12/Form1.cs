@@ -46,15 +46,12 @@ namespace Task12
         List<Square> _squares = new List<Square>();
         List<int> _listPositionX = new List<int>();
         Random _random = new Random();
-        int _positionX;
-        int _positionY;
-        int _positionBasketX;
-        int _positionBasketY;
         int _countBlue = 0;
         int _countGreen = 0;
         int _countRed = 0;
         Basket _basket;
         private const int _gameFieldSize = 30;
+
         public Form1()
         {
             InitializeComponent();
@@ -62,14 +59,8 @@ namespace Task12
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            Panel.CreateGraphics().Clear(Color.White);
             _squares.Clear();
-            int width = Panel.ClientSize.Width / _gameFieldSize;
-            int height = Panel.ClientSize.Height / _gameFieldSize;
-            _positionBasketX = 13;
-            _positionBasketY = 30;
-
-            _basket = new Basket(_positionBasketX, _positionBasketY, 3, 1, Color.Purple);
+            _basket = new Basket(13, 30, 3, 1, Color.Purple);
 
             TimerCallback tm = new TimerCallback(OnTimerTicked);
             _timer = new Timer(tm, 0, 0, 500);
@@ -78,6 +69,7 @@ namespace Task12
         private void OnTimerTicked(object? state)
         {
             _listPositionX.Clear();
+            List<Square> squaresDelete = new List<Square>();
             for (int j = 0; j < _gameFieldSize; j++)
             {
                 int chance = _random.Next(1, 11);
@@ -86,14 +78,13 @@ namespace Task12
                     _listPositionX.Add(j);
                 }
             }
-            _positionY = 0;
             if (_squares.Count > 1)
             {
                 for (int i = 0; i < _squares.Count; i++)
                 {
                     if (_basket.PositionY == _squares[i].PositionY && _basket.PositionX <= _squares[i].PositionX && _squares[i].PositionX <= (_basket.PositionX + _basket.Width - 1))
                     {
-                        _squares.RemoveAt(i);
+                        squaresDelete.Add(_squares[i]);
 
                         if (_squares[i].Color == Color.Blue)
                         {
@@ -123,6 +114,10 @@ namespace Task12
                         }
                     }
                 }
+                for (int i = 0; i < squaresDelete.Count; i++)
+                {
+                    _squares.Remove(squaresDelete[i]);
+                }
             }
             if (_squares.Count > 1)
             {
@@ -134,28 +129,24 @@ namespace Task12
 
             for (int i = 0; i < _listPositionX.Count; i++)
             {
-                _positionX = _listPositionX[i];
-
                 int randomColor = _random.Next(0, 3);
                 if (randomColor == 0)
                 {
-                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Red);
+                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Red);
                     _squares.Add(square);
                 }
                 else if (randomColor == 1)
                 {
-                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Blue);
+                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Blue);
                     _squares.Add(square);
                 }
                 else if (randomColor == 2)
                 {
-                    Square square = new Square(_positionX, _positionY, 1, 1, Color.Green);
+                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Green);
                     _squares.Add(square);
                 }
             }
-
             Draw();
-
         }
 
         public void Draw()
