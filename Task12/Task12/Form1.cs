@@ -44,7 +44,6 @@ namespace Task12
 
         Timer _timer;
         List<Square> _squares = new List<Square>();
-        List<int> _listPositionX = new List<int>();
         Random _random = new Random();
         int _countBlue = 0;
         int _countGreen = 0;
@@ -68,16 +67,8 @@ namespace Task12
 
         private void OnTimerTicked(object? state)
         {
-            _listPositionX.Clear();
             List<Square> squaresDelete = new List<Square>();
-            for (int j = 0; j < _gameFieldSize; j++)
-            {
-                int chance = _random.Next(1, 11);
-                if (chance <= 1)
-                {
-                    _listPositionX.Add(j);
-                }
-            }
+            
             if (_squares.Count > 1)
             {
                 for (int i = 0; i < _squares.Count; i++)
@@ -127,28 +118,33 @@ namespace Task12
                 }
             }
 
-            for (int i = 0; i < _listPositionX.Count; i++)
+            for (int x = 0; x < _gameFieldSize; x++)
             {
-                int randomColor = _random.Next(0, 3);
-                if (randomColor == 0)
+                double chance = _random.NextDouble();
+                if (chance <= 0.1)
                 {
-                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Red);
-                    _squares.Add(square);
-                }
-                else if (randomColor == 1)
-                {
-                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Blue);
-                    _squares.Add(square);
-                }
-                else if (randomColor == 2)
-                {
-                    Square square = new Square(_listPositionX[i], 0, 1, 1, Color.Green);
-                    _squares.Add(square);
+                    int randomColor = _random.Next(0, 3);
+                    if (randomColor == 0)
+                    {
+                        AddSquare(x, Color.Red);
+                    }
+                    else if (randomColor == 1)
+                    {
+                        AddSquare(x, Color.Blue);
+                    }
+                    else if (randomColor == 2)
+                    {
+                        AddSquare(x, Color.Green);
+                    }
                 }
             }
             Draw();
         }
-
+        private void AddSquare(int x, Color color)
+        {
+            Square square = new Square(x, 0, 1, 1, color);
+            _squares.Add(square);
+        }
         public void Draw()
         {
             Graphics g = Panel.CreateGraphics();
